@@ -1,5 +1,9 @@
-@if variable-exists('cody-base-partials') == false or index($cody-base-partials, 'z-index') {
-  :root {
+@if variable-exists("cody-base-partials") ==
+  false or
+  index($cody-base-partials, "z-index")
+{
+  //:root
+  .educate-content-ui {
     --zindex-header: 3; // e.g., main header
     --zindex-popover: 5; // e.g., tooltips and dropdown
     --zindex-fixed-element: 10; // e.g., 'back to top' button
