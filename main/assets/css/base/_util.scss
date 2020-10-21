@@ -1524,19 +1524,19 @@
     // --------------------------------
 
     //:root
-    .educate-content-ui {
-      --max-width-xxxxs: 20rem; // ~320px
-      --max-width-xxxs: 26rem; // ~416px
-      --max-width-xxs: 32rem; // ~512px
-      --max-width-xs: 38rem; // ~608px
-      --max-width-sm: 48rem; // ~768px
-      --max-width-md: 64rem; // ~1024px
-      --max-width-lg: 80rem; // ~1280px
-      --max-width-xl: 90rem; // ~1440px
-      --max-width-xxl: 100rem; // ~1600px
-      --max-width-xxxl: 120rem; // ~1920px
-      --max-width-xxxxl: 150rem; // ~2400px
-    }
+    //.educate-content-ui {
+    --max-width-xxxxs: 20rem; // ~320px
+    --max-width-xxxs: 26rem; // ~416px
+    --max-width-xxs: 32rem; // ~512px
+    --max-width-xs: 38rem; // ~608px
+    --max-width-sm: 48rem; // ~768px
+    --max-width-md: 64rem; // ~1024px
+    --max-width-lg: 80rem; // ~1280px
+    --max-width-xl: 90rem; // ~1440px
+    --max-width-xxl: 100rem; // ~1600px
+    --max-width-xxxl: 120rem; // ~1920px
+    --max-width-xxxxl: 150rem; // ~2400px
+    //}
 
     .max-width-xxxxs {
       max-width: var(--max-width-xxxxs);

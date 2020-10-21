@@ -6,10 +6,11 @@ Descr: Circular progress bar card for app UI
 Usage: codyhouse.co/license
 
 -------------------------------- */
-
-.c-progress-bar-card {
-  .c-progress-bar {
-    --c-progress-bar-size: 200px;
-    --c-progress-bar-stroke-width: 6; // max-value = 12
+.educate-content-ui {
+  .c-progress-bar-card {
+    .c-progress-bar {
+      --c-progress-bar-size: 200px;
+      --c-progress-bar-stroke-width: 6; // max-value = 12
+    }
   }
 }

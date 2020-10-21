@@ -1,4 +1,5 @@
-:root {
+//:root
+.educate-content-ui {
   // size - 👇 uncomment to modify default icon sizes
   // --icon-xxxs: 8px;
   // --icon-xxs:  12px;
@@ -11,7 +12,7 @@
   // --icon-xxxl: 128px;
 }
 
-.icon {
+.educate-content-ui .icon {
   // 👇 include the font-family declaration here if you are using an icon font
   // font-family: 'fontName';
 }
