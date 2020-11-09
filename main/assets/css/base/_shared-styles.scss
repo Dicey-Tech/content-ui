@@ -5,8 +5,8 @@
   false or
   index($cody-base-partials, "shared-styles")
 {
-  //:root
-  .educate-content-ui {
+  //.educate-content-ui
+  :root {
     // radius
     --radius-sm: calc(var(--radius, 0.25em) / 2);
     --radius-md: var(--radius, 0.25em);

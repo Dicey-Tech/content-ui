@@ -25,7 +25,8 @@
 }
 
 //:root, *
-.educate-content-ui {
+.educate-content-ui,
+* {
   // type scale
   --text-xs: calc(
     (var(--text-unit) / var(--text-scale-ratio)) / var(--text-scale-ratio)

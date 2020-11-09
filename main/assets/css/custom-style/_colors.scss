@@ -4,8 +4,8 @@
 
 // --------------------------------
 
-//:root,
-.educate-content-ui,
+//:root, .educate-content-ui
+:root,
 [data-theme="default"] {
   // main
   @include defineColorHSL(--color-primary-darker, 220, 90%, 42%);
