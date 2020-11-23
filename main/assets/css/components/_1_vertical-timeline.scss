@@ -31,7 +31,7 @@ Usage: codyhouse.co/license
       );
       height: 100%;
       width: var(--v-timeline-track-width);
-      background-color: alpha(var(--color-contrast-higher), 0.1);
+      background-color: alpha(var(--color-contrast-higher), 0.1) !important;
     }
   }
 
@@ -60,6 +60,7 @@ Usage: codyhouse.co/license
     position: relative;
     top: calc(0.5 * var(--v-timeline-marker-size));
     flex-grow: 1;
+    border-radius: var(--radius-md);
 
     &::before {
       // triangle indicator
