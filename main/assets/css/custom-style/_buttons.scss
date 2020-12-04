@@ -35,9 +35,11 @@
   .btn--primary {
     background-color: var(--color-primary);
     color: var(--color-white) !important;
+    background-image: none;
 
     &:hover {
       background-color: var(--color-primary-dark);
+      background-image: none;
     }
 
     &:focus {
