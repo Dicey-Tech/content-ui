@@ -317,6 +317,103 @@ Math.easeOutElastic = function (t, b, c, d) {
 function resetFocusTabsStyle() {
   window.dispatchEvent(new CustomEvent('initFocusTabs'));
 };
+// File#: _1_accordion
+// Usage: codyhouse.co/license
+(function() {
+    var Accordion = function(element) {
+      this.element = element;
+      this.items = Util.getChildrenByClassName(this.element, 'js-accordion__item');
+      this.version = this.element.getAttribute('data-version') ? '-'+this.element.getAttribute('data-version') : '';
+      this.showClass = 'accordion'+this.version+'__item--is-open';
+      this.animateHeight = (this.element.getAttribute('data-animation') == 'on');
+      this.multiItems = !(this.element.getAttribute('data-multi-items') == 'off'); 
+      this.initAccordion();
+    };
+  
+    Accordion.prototype.initAccordion = function() {
+      //set initial aria attributes
+      for( var i = 0; i < this.items.length; i++) {
+        var button = this.items[i].getElementsByTagName('button')[0],
+          content = this.items[i].getElementsByClassName('js-accordion__panel')[0],
+          isOpen = Util.hasClass(this.items[i], this.showClass) ? 'true' : 'false';
+        Util.setAttributes(button, {'aria-expanded': isOpen, 'aria-controls': 'accordion-content-'+i, 'id': 'accordion-header-'+i});
+        Util.addClass(button, 'js-accordion__trigger');
+        Util.setAttributes(content, {'aria-labelledby': 'accordion-header-'+i, 'id': 'accordion-content-'+i});
+      }
+  
+      //listen for Accordion events
+      this.initAccordionEvents();
+    };
+  
+    Accordion.prototype.initAccordionEvents = function() {
+      var self = this;
+  
+      this.element.addEventListener('click', function(event) {
+        var trigger = event.target.closest('.js-accordion__trigger');
+        //check index to make sure the click didn't happen inside a children accordion
+        if( trigger && Util.getIndexInArray(self.items, trigger.parentElement) >= 0) self.triggerAccordion(trigger);
+      });
+    };
+  
+    Accordion.prototype.triggerAccordion = function(trigger) {
+      var self = this;
+      var bool = (trigger.getAttribute('aria-expanded') === 'true');
+  
+      this.animateAccordion(trigger, bool);
+    };
+  
+    Accordion.prototype.animateAccordion = function(trigger, bool) {
+      var self = this;
+      var item = trigger.closest('.js-accordion__item'),
+        content = item.getElementsByClassName('js-accordion__panel')[0],
+        ariaValue = bool ? 'false' : 'true';
+  
+      if(!bool) Util.addClass(item, this.showClass);
+      trigger.setAttribute('aria-expanded', ariaValue);
+      self.resetContentVisibility(item, content, bool);
+  
+      if( !this.multiItems && !bool) this.closeSiblings(item);
+    };
+  
+    Accordion.prototype.resetContentVisibility = function(item, content, bool) {
+      Util.toggleClass(item, this.showClass, !bool);
+      content.removeAttribute("style");
+      if(bool && !this.multiItems) { // accordion item has been closed -> check if there's one open to move inside viewport 
+        this.moveContent();
+      }
+    };
+  
+    Accordion.prototype.closeSiblings = function(item) {
+      //if only one accordion can be open -> search if there's another one open
+      var index = Util.getIndexInArray(this.items, item);
+      for( var i = 0; i < this.items.length; i++) {
+        if(Util.hasClass(this.items[i], this.showClass) && i != index) {
+          this.animateAccordion(this.items[i].getElementsByClassName('js-accordion__trigger')[0], true);
+          return false;
+        }
+      }
+    };
+  
+    Accordion.prototype.moveContent = function() { // make sure title of the accordion just opened is inside the viewport
+      var openAccordion = this.element.getElementsByClassName(this.showClass);
+      if(openAccordion.length == 0) return;
+      var boundingRect = openAccordion[0].getBoundingClientRect();
+      if(boundingRect.top < 0 || boundingRect.top > window.innerHeight) {
+        var windowScrollTop = window.scrollY || document.documentElement.scrollTop;
+        window.scrollTo(0, boundingRect.top + windowScrollTop);
+      }
+    };
+  
+    window.Accordion = Accordion;
+    
+    //initialize the Accordion objects
+    var accordions = document.getElementsByClassName('js-accordion');
+    if( accordions.length > 0 ) {
+      for( var i = 0; i < accordions.length; i++) {
+        (function(i){new Accordion(accordions[i]);})(i);
+      }
+    }
+  }());
 // File#: _1_circular-progress-bar
 // Usage: codyhouse.co/license
 (function() {	
@@ -750,6 +847,141 @@ function resetFocusTabsStyle() {
       }
     }
   }());
+// File#: _1_read-more
+// Usage: codyhouse.co/license
+(function() {
+    var ReadMore = function(element) {
+      this.element = element;
+      this.moreContent = this.element.getElementsByClassName('js-read-more__content');
+      this.count = this.element.getAttribute('data-characters') || 200;
+      this.counting = 0;
+      this.btnClasses = this.element.getAttribute('data-btn-class');
+      this.ellipsis = this.element.getAttribute('data-ellipsis') && this.element.getAttribute('data-ellipsis') == 'off' ? false : true;
+      this.btnShowLabel = 'Read more';
+      this.btnHideLabel = 'Read less';
+      this.toggleOff = this.element.getAttribute('data-toggle') && this.element.getAttribute('data-toggle') == 'off' ? false : true;
+      if( this.moreContent.length == 0 ) splitReadMore(this);
+      setBtnLabels(this);
+      initReadMore(this);
+    };
+  
+    function splitReadMore(readMore) { 
+      splitChildren(readMore.element, readMore); // iterate through children and hide content
+    };
+  
+    function splitChildren(parent, readMore) {
+      if(readMore.counting >= readMore.count) {
+        Util.addClass(parent, 'js-read-more__content');
+        return parent.outerHTML;
+      }
+      var children = parent.childNodes;
+      var content = '';
+      for(var i = 0; i < children.length; i++) {
+        if (children[i].nodeType == Node.TEXT_NODE) {
+          content = content + wrapText(children[i], readMore);
+        } else {
+          content = content + splitChildren(children[i], readMore);
+        }
+      }
+      parent.innerHTML = content;
+      return parent.outerHTML;
+    };
+  
+    function wrapText(element, readMore) {
+      var content = element.textContent;
+      if(content.replace(/\s/g,'').length == 0) return '';// check if content is empty
+      if(readMore.counting >= readMore.count) {
+        return '<span class="js-read-more__content">' + content + '</span>';
+      }
+      if(readMore.counting + content.length < readMore.count) {
+        readMore.counting = readMore.counting + content.length;
+        return content;
+      }
+      var firstContent = content.substr(0, readMore.count - readMore.counting);
+      firstContent = firstContent.substr(0, Math.min(firstContent.length, firstContent.lastIndexOf(" ")));
+      var secondContent = content.substr(firstContent.length, content.length);
+      readMore.counting = readMore.count;
+      return firstContent + '<span class="js-read-more__content">' + secondContent + '</span>';
+    };
+  
+    function setBtnLabels(readMore) { // set custom labels for read More/Less btns
+      var btnLabels = readMore.element.getAttribute('data-btn-labels');
+      if(btnLabels) {
+        var labelsArray = btnLabels.split(',');
+        readMore.btnShowLabel = labelsArray[0].trim();
+        readMore.btnHideLabel = labelsArray[1].trim();
+      }
+    };
+  
+    function initReadMore(readMore) { // add read more/read less buttons to the markup
+      readMore.moreContent = readMore.element.getElementsByClassName('js-read-more__content');
+      if( readMore.moreContent.length == 0 ) {
+        Util.addClass(readMore.element, 'read-more--loaded');
+        return;
+      }
+      var btnShow = ' <button class="js-read-more__btn '+readMore.btnClasses+'">'+readMore.btnShowLabel+'</button>';
+      var btnHide = ' <button class="js-read-more__btn is-hidden '+readMore.btnClasses+'">'+readMore.btnHideLabel+'</button>';
+      if(readMore.ellipsis) {
+        btnShow = '<span class="js-read-more__ellipsis" aria-hidden="true">...</span>'+ btnShow;
+      }
+  
+      readMore.moreContent[readMore.moreContent.length - 1].insertAdjacentHTML('afterend', btnHide);
+      readMore.moreContent[0].insertAdjacentHTML('afterend', btnShow);
+      resetAppearance(readMore);
+      initEvents(readMore);
+    };
+  
+    function resetAppearance(readMore) { // hide part of the content
+      for(var i = 0; i < readMore.moreContent.length; i++) Util.addClass(readMore.moreContent[i], 'is-hidden');
+      Util.addClass(readMore.element, 'read-more--loaded'); // show entire component
+    };
+  
+    function initEvents(readMore) { // listen to the click on the read more/less btn
+      readMore.btnToggle = readMore.element.getElementsByClassName('js-read-more__btn');
+      readMore.ellipsis = readMore.element.getElementsByClassName('js-read-more__ellipsis');
+  
+      readMore.btnToggle[0].addEventListener('click', function(event){
+        event.preventDefault();
+        updateVisibility(readMore, true);
+      });
+      readMore.btnToggle[1].addEventListener('click', function(event){
+        event.preventDefault();
+        updateVisibility(readMore, false);
+      });
+    };
+  
+    function updateVisibility(readMore, visibile) {
+      for(var i = 0; i < readMore.moreContent.length; i++) Util.toggleClass(readMore.moreContent[i], 'is-hidden', !visibile);
+      // reset btns appearance
+      Util.toggleClass(readMore.btnToggle[0], 'is-hidden', visibile);
+      Util.toggleClass(readMore.btnToggle[1], 'is-hidden', !visibile);
+      if(readMore.ellipsis.length > 0 ) Util.toggleClass(readMore.ellipsis[0], 'is-hidden', visibile);
+      if(!readMore.toggleOff) Util.addClass(readMore.btn, 'is-hidden');
+      // move focus
+      if(visibile) {
+        var targetTabIndex = readMore.moreContent[0].getAttribute('tabindex');
+        Util.moveFocus(readMore.moreContent[0]);
+        resetFocusTarget(readMore.moreContent[0], targetTabIndex);
+      } else {
+        Util.moveFocus(readMore.btnToggle[0]);
+      }
+    };
+  
+    function resetFocusTarget(target, tabindex) {
+      if( parseInt(target.getAttribute('tabindex')) < 0) {
+        target.style.outline = 'none';
+        !tabindex && target.removeAttribute('tabindex');
+      }
+    };
+  
+    //initialize the ReadMore objects
+    var readMore = document.getElementsByClassName('js-read-more');
+    if( readMore.length > 0 ) {
+      for( var i = 0; i < readMore.length; i++) {
+        (function(i){new ReadMore(readMore[i]);})(i);
+      }
+    };
+  }());
 // File#: _1_swipe-content
 (function() {
     var SwipeContent = function(element) {
@@ -885,6 +1117,58 @@ function resetFocusTabsStyle() {
     if( swipe.length > 0 ) {
       for( var i = 0; i < swipe.length; i++) {
         (function(i){new SwipeContent(swipe[i]);})(i);
+      }
+    }
+  }());
+// File#: _1_table
+// Usage: codyhouse.co/license
+(function() {
+    function initTable(table) {
+      checkTableLayour(table); // switch from a collapsed to an expanded layout
+      Util.addClass(table, 'table--loaded'); // show table
+  
+      // custom event emitted when window is resized
+      table.addEventListener('update-table', function(event){
+        checkTableLayour(table);
+      });
+    };
+  
+    function checkTableLayour(table) {
+      var layout = getComputedStyle(table, ':before').getPropertyValue('content').replace(/\'|"/g, '');
+      Util.toggleClass(table, tableExpandedLayoutClass, layout != 'collapsed');
+    };
+  
+    var tables = document.getElementsByClassName('js-table'),
+      tableExpandedLayoutClass = 'table--expanded';
+    if( tables.length > 0 ) {
+      var j = 0;
+      for( var i = 0; i < tables.length; i++) {
+        var beforeContent = getComputedStyle(tables[i], ':before').getPropertyValue('content');
+        if(beforeContent && beforeContent !='' && beforeContent !='none') {
+          (function(i){initTable(tables[i]);})(i);
+          j = j + 1;
+        } else {
+          Util.addClass(tables[i], 'table--loaded');
+        }
+      }
+      
+      if(j > 0) {
+        var resizingId = false,
+          customEvent = new CustomEvent('update-table');
+        window.addEventListener('resize', function(event){
+          clearTimeout(resizingId);
+          resizingId = setTimeout(doneResizing, 300);
+        });
+  
+        function doneResizing() {
+          for( var i = 0; i < tables.length; i++) {
+            (function(i){tables[i].dispatchEvent(customEvent)})(i);
+          };
+        };
+  
+        (window.requestAnimationFrame) // init table layout
+          ? window.requestAnimationFrame(doneResizing)
+          : doneResizing();
       }
     }
   }());
