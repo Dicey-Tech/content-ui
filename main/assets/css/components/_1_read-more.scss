@@ -22,4 +22,17 @@ Usage: codyhouse.co/license
   cursor: pointer;
   color: var(--color-primary);
   text-decoration: underline;
+  background: none;
+  &:hover,
+  &:active,
+  &:focus {
+    background: none;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none;
+    &:not(:disabled) {
+      box-shadow: inherit;
+      border: none;
+    }
+  }
 }
