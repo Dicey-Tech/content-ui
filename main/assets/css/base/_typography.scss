@@ -5,10 +5,12 @@
   false or
   index($cody-base-partials, "typography")
 {
-  //:root
+  :root {
+    --body-line-height: 1.4;
+  }
+
   .educate-content-ui {
     --heading-line-height: 1.2;
-    --body-line-height: 1.4;
 
     body {
       font-size: var(--text-base-size, 1em);

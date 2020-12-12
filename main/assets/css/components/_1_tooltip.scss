@@ -7,9 +7,11 @@ Usage: codyhouse.co/license
 
 -------------------------------- */
 
-.educate-content-ui {
+:root {
   --tooltip-triangle-size: 12px;
+}
 
+.educate-content-ui {
   .tooltip-trigger {
     // style inline-text tooltip trigger
     white-space: nowrap;
