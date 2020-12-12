@@ -109,15 +109,15 @@
       var selectedTriggerPosition = (popover.positionTarget) ? popover.positionTarget.getBoundingClientRect() : popover.selectedTrigger.getBoundingClientRect();
       
       var menuOnTop = (window.innerHeight - selectedTriggerPosition.bottom) < selectedTriggerPosition.top;
-        
+      
       var left = selectedTriggerPosition.left,
         right = (window.innerWidth - selectedTriggerPosition.right),
         isRight = (window.innerWidth < selectedTriggerPosition.left + popover.element.offsetWidth);
   
       var horizontal = isRight ? 'right: '+right+'px;' : 'left: '+left+'px;',
         vertical = menuOnTop
-          ? 'bottom: '+(window.innerHeight - selectedTriggerPosition.top)+'px;'
-          : 'top: '+selectedTriggerPosition.bottom+'px;';
+          ? 'bottom: '+(window.innerHeight - selectedTriggerPosition.top)+'px; top: unset;'
+          : 'top: '+selectedTriggerPosition.bottom+'px; bottom: unset;';
       // check right position is correct -> otherwise set left to 0
       if( isRight && (right + popover.element.offsetWidth) > window.innerWidth) horizontal = 'left: '+ parseInt((window.innerWidth - popover.element.offsetWidth)/2)+'px;';
       // check if popover needs a max-height (user will scroll inside the popover)
