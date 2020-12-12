@@ -33,6 +33,7 @@ Usage: codyhouse.co/license
   line-height: 1.4;
   @include fontSmooth;
   transition: opacity 0.2s, visibility 0.2s;
+  opacity: unset;
 
   a {
     color: inherit;
@@ -97,4 +98,3 @@ Usage: codyhouse.co/license
   visibility: hidden;
   opacity: 0;
 }
-//}
