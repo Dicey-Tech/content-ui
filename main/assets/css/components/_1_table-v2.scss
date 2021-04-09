@@ -41,7 +41,7 @@ Usage: codyhouse.co/license
 
 .tbl__body {
   .tbl__row {
-    border-bottom: 1px solid var(--color-contrast-lower);
+    border-bottom: 1px solid var(--color-contrast-lower) !important;
     transition: 0.2s;
 
     &:hover {
@@ -56,4 +56,5 @@ Usage: codyhouse.co/license
 
 .tbl__cell {
   padding: var(--space-xs);
+  background: none !important;
 }

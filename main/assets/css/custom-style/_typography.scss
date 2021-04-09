@@ -7,7 +7,8 @@
 //:root
 .educate-content-ui {
   // font family
-  --font-primary: system-ui, sans-serif;
+  --font-primary: -apple-system, BlinkMacSystemFont, "Quicksand", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
   // font size
   --text-base-size: 1em; // body font-size

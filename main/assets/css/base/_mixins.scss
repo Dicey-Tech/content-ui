@@ -13,7 +13,7 @@
 // crop top space on text elements - caused by line height
 @mixin lhCrop($line-height, $capital-letter: 1) {
   &::before {
-    content: '';
+    content: "";
     display: block;
     height: 0;
     width: 0;
@@ -35,7 +35,7 @@
 
 // edit space unit on a component level
 @mixin spaceUnit($space-unit) {
-  --space-unit:  #{$space-unit};
+  --space-unit: #{$space-unit};
 }
 
 // --------------------------------
@@ -62,36 +62,44 @@
 // --------------------------------
 
 // define HSL color variable
-@mixin defineColorHSL($color, $hue, $saturation, $lightness){
-  #{$color}: unquote("hsl(#{$hue}, #{$saturation}, #{$lightness})");#{$color}-h: #{$hue};#{$color}-s: #{$saturation};#{$color}-l: #{$lightness};
+@mixin defineColorHSL($color, $hue, $saturation, $lightness) {
+  #{$color}: unquote("hsl(#{$hue}, #{$saturation}, #{$lightness})");
+  #{$color}-h: #{$hue};
+  #{$color}-s: #{$saturation};
+  #{$color}-l: #{$lightness};
 }
 
 // return color with different opacity value
-@function alpha($color, $opacity){
-  $color: str-replace($color, 'var(');
-  $color: str-replace($color, ')');
-  $color-h: var(#{$color+'-h'});
-  $color-s: var(#{$color+'-s'});
-  $color-l: var(#{$color+'-l'});
+@function alpha($color, $opacity) {
+  $color: str-replace($color, "var(");
+  $color: str-replace($color, ")");
+  $color-h: var(#{$color + "-h"});
+  $color-s: var(#{$color + "-s"});
+  $color-l: var(#{$color + "-l"});
   @return hsla($color-h, $color-s, $color-l, $opacity);
 }
 
 // return color with different lightness value
-@function lightness($color, $lightnessMultiplier){
-  $color: str-replace($color, 'var(');
-  $color: str-replace($color, ')');
-  $color-h: var(#{$color+'-h'});
-  $color-s: var(#{$color+'-s'});
-  $color-l: var(#{$color+'-l'});
+@function lightness($color, $lightnessMultiplier) {
+  $color: str-replace($color, "var(");
+  $color: str-replace($color, ")");
+  $color-h: var(#{$color + "-h"});
+  $color-s: var(#{$color + "-s"});
+  $color-l: var(#{$color + "-l"});
   @return hsl($color-h, $color-s, calc(#{$color-l} * #{$lightnessMultiplier}));
 }
 
 // replace substring with another string
 // credits: https://css-tricks.com/snippets/sass/str-replace-function/
-@function str-replace($string, $search, $replace: '') {
+@function str-replace($string, $search, $replace: "") {
   $index: str-index($string, $search);
   @if $index {
-    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+    @return str-slice($string, 1, $index - 1) + $replace +
+      str-replace(
+        str-slice($string, $index + str-length($search)),
+        $search,
+        $replace
+      );
   }
   @return $string;
 }
@@ -125,8 +133,8 @@
 $grid-columns: 12 !default;
 
 // used to round width to a number with 2 decimal places - used for IE fallback
-@function round-width ($i) {
-  $width : floor(100% * $i * 100/ $grid-columns) / 100;
+@function round-width($i) {
+  $width: floor(100% * $i * 100 / $grid-columns) / 100;
   @return $width;
 }
 
@@ -141,7 +149,7 @@ $grid-columns: 12 !default;
 @mixin gridFallback($gap: null) {
   display: flex;
   flex-wrap: wrap;
-  @if( $gap == null ) {
+  @if ($gap == null) {
     $gap: var(--space-md);
   }
 
@@ -157,13 +165,13 @@ $grid-columns: 12 !default;
 
     > * {
       padding: 0;
-      max-width: none!important;
+      max-width: none !important;
     }
   }
 }
 
 @mixin column($width) {
-  @if unit($width) != '%' {
+  @if unit($width) != "%" {
     $width: $width * 100%;
   }
   flex-basis: #{$width};
@@ -176,18 +184,35 @@ $grid-columns: 12 !default;
 
 // --------------------------------
 
-@mixin triangle ($direction: up, $width: 12px, $color: red) {
+@mixin triangle($direction: up, $width: 12px, $color: red) {
   width: 0;
   height: 0;
   border: $width solid transparent;
 
-  @if( $direction == left ) {
+  @if ($direction == left) {
     border-right-color: $color;
-  } @else if( $direction == right ) {
+  } @else if($direction == right) {
     border-left-color: $color;
-  } @else if( $direction == down ) {
+  } @else if($direction == down) {
     border-top-color: $color;
   } @else {
     border-bottom-color: $color;
+  }
+}
+
+// remove button styling from 3ducate comprehensive theme
+@mixin clear_button_style {
+  background: none;
+  &:hover,
+  &:active,
+  &:focus {
+    background: none;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none;
+    &:not(:disabled) {
+      box-shadow: inherit;
+      border: none;
+    }
   }
 }

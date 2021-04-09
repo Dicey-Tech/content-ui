@@ -1811,7 +1811,7 @@
     .border-bottom {
       border-bottom: 1px
         solid
-        alpha(var(--color-contrast-low), var(--border-o, 1));
+        alpha(var(--color-contrast-low), var(--border-o, 1)) !important;
     }
     .border-left {
       border-left: 1px
@@ -1824,7 +1824,7 @@
         alpha(var(--color-contrast-low), var(--border-o, 1));
     }
     .border-2 {
-      border-width: 2px;
+      border-width: 2px !important;
     }
     .border-3 {
       border-width: 3px;
