@@ -11901,7 +11901,7 @@ Usage: codyhouse.co/license
 
 .educate-content-ui .tooltip-trigger {
   white-space: nowrap;
-  border-bottom: 1px dotted var(--color-contrast-high);
+  border-bottom: 1px dotted var(--color-contrast-high) !important;
   cursor: help;
 }
 
