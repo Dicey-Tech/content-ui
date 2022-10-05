@@ -134,7 +134,7 @@ $grid-columns: 12 !default;
 
 // used to round width to a number with 2 decimal places - used for IE fallback
 @function round-width($i) {
-  $width: floor(100% * $i * 100 / $grid-columns) / 100;
+  $width: calc(floor(calc(100% * $i * 100 / $grid-columns))/ 100);
   @return $width;
 }
 
